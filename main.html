@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>俺のホテル</title>
+  <link rel="stylesheet" href="/main.css">
+</head>
+
+<body>
+  <header>
+    <h1 id="top">俺のホテル</h1>
+  </header>
+  <section class="first view">
+    <div class="block">
+      <div>
+        <span class="ini">ログインID</span><input type="text" name="text" id="id_area">
+        <span class="ini">パスワード</span><input type="text" name="text" id="pass_area">
+      </div>
+      <div>
+        <button id="save1">Save</button>
+        <button id="login" class="secList">Login</button>
+      </div>
+    </div>
+  </section>
+  <section id="login_view" class="login view">
+    <main class="block">
+      <div class="pic">
+        <div id="img_div1">
+          <img src="/picture/hotel_1.JPG" alt="" class="img" id="img1">
+        </div>
+        <div id="img_div2">
+          <img src="/picture/hotel_2.JPG" alt="" class="img" id="img2">
+        </div>
+        <div id="img_div3">
+          <img src="/picture/hotel_3.JPG" alt="" class="img" id="img3">
+        </div>
+      </div>
+      <div class="pic">
+        <div id="img_div4">
+          <img src="/picture/hotel_4.JPG" alt="" class="img" id="img4">
+        </div>
+        <div id="img_div5">
+          <img src="/picture/hotel_5.JPG" alt="" class="img" id="img5">
+        </div>
+        <div id="img_div6">
+          <img src="/picture/hotel_6.JPG" alt="" class="img" id="img6">
+        </div>
+      </div>
+      <div>
+        <button id="save2">Save</button>
+        <button id="clear">Clear</button>
+      </div>
+    </main>
+  </section>
+  <footer>
+    <small>おのうえ</small>
+  </footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    //初期表示は画像部分は非表示
+    document.getElementById("login_view").style.display = "none";
+
+    //Saveボタンで、入力されたID/PASSをローカルストレージに保存
+    $("#save1").on("click", function () {
+      const LoginId = $("#id_area").val();
+      const LoginPass = $("#pass_area").val();
+      localStorage.setItem(LoginId, LoginPass);
+    });
+
+    //Loginボタンで、入力されたID/PASSと一致するか照合
+    //ログインボタン押す
+    $("#login").on("click", function () {
+      //入力されているデータを呼び出す
+      const LoginId = $("#id_area").val();
+      const LoginPass = $("#pass_area").val();
+      //ローカルストレージに保存済みの情報を呼び出す
+      const PresetPass = localStorage.getItem(LoginId);
+      //ローカルストレージに保存されているID/PASSと一致する時は画像部分を表示
+      if (LoginPass == PresetPass) {
+        const login_view = document.getElementById("login_view");
+        login_view.style.display = "block";
+        //Login時に、ID/PASSが一致するローカルストレージの情報を抜き出してclassを付与
+        //※下の処理まで見ないと理解不能
+        const jsonData = localStorage.getItem(LoginId + "data");
+        console.log(jsonData)
+        if (jsonData.match(/"hotel_1":{"0"/)) {
+          $('#img_div1').addClass('selected1');
+        };
+        if (jsonData.match(/"hotel_2":{"0"/)) {
+          $('#img_div2').addClass('selected2');
+        };
+        if (jsonData.match(/"hotel_3":{"0"/)) {
+          $('#img_div3').addClass('selected3');
+        };
+        if (jsonData.match(/"hotel_4":{"0"/)) {
+          $('#img_div4').addClass('selected4');
+        };
+        if (jsonData.match(/"hotel_5":{"0"/)) {
+          $('#img_div5').addClass('selected5');
+        };
+        if (jsonData.match(/"hotel_6":{"0"/)) {
+          $('#img_div6').addClass('selected6');
+        };
+        //一致しない場合は不正エラー
+      } else {
+        alert("ID・Passwordが不正です");
+      }
+    });
+
+
+
+    //クリックした画像を赤枠で囲う、再度クリックしたら赤枠を取り除く
+    $('#img1').on('click', function () {
+      $('#img_div1').toggleClass('selected1');
+    });
+    $('#img2').on('click', function () {
+      $('#img_div2').toggleClass('selected2');
+    });
+    $('#img3').on('click', function () {
+      $('#img_div3').toggleClass('selected3');
+    });
+    $('#img4').on('click', function () {
+      $('#img_div4').toggleClass('selected4');
+    });
+    $('#img5').on('click', function () {
+      $('#img_div5').toggleClass('selected5');
+    });
+    $('#img6').on('click', function () {
+      $('#img_div6').toggleClass('selected6');
+    });
+
+    //Saveボタンで赤枠で囲った画像の情報とID/PASSの情報をローカルストレージに保存
+    $("#save2").on("click", function () {
+      const hotel_1_check = document.getElementsByClassName("selected1")
+      const hotel_2_check = document.getElementsByClassName("selected2")
+      const hotel_3_check = document.getElementsByClassName("selected3")
+      const hotel_4_check = document.getElementsByClassName("selected4")
+      const hotel_5_check = document.getElementsByClassName("selected5")
+      const hotel_6_check = document.getElementsByClassName("selected6")
+      const MyFavorite = {
+        hotel_1: hotel_1_check,
+        hotel_2: hotel_2_check,
+        hotel_3: hotel_3_check,
+        hotel_4: hotel_4_check,
+        hotel_5: hotel_5_check,
+        hotel_6: hotel_6_check,
+      };
+      const LoginId = $("#id_area").val();
+      const jsonData = JSON.stringify(MyFavorite);
+      localStorage.setItem(LoginId + "data", jsonData);
+    });
+
+    //Clearを押した場合、現在入力されているID/PASSに紐づくローカルストレージの情報を削除する
+    $("#clear").on("click", function () {
+      const LoginId = $("#id_area").val();
+      localStorage.removeItem(LoginId + "data");
+    });
+
+  </script>
+
+</body>
+
+</html>

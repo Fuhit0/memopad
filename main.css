@@ -1,0 +1,42 @@
+body {
+    margin: auto;
+}
+
+#top {
+    margin: 20px;
+}
+
+#login,
+#save1,
+#save2,
+#clear {
+    margin: 20px;
+    font-size: 20px;
+}
+
+.ini {
+    margin: 20px;
+    justify-content: space-between;
+}
+
+.pic {
+    align-items: center;
+    display: flex;
+}
+
+.img {
+    width: 250px;
+    margin: 20px;
+}
+
+.selected1,
+.selected2,
+.selected3,
+.selected4,
+.selected5,
+.selected6 {
+    border: 10px;
+    border-color: red;
+    background-size: 10px;
+    background-color: red;
+}
